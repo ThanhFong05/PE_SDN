@@ -1,68 +1,88 @@
-import Image from "next/image";
+import Link from 'next/link';
+import { getSession } from '@/lib/auth';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import LogoutButton from '@/components/auth/LogoutButton';
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+
+export default async function HomePage() {
+  const session = await getSession();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <header className="border-b bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <Link href="/" className="font-bold text-xl text-gray-900">
+            Exam Portal
+          </Link>
+          <div className="flex items-center gap-4">
+            {session ? (
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-600" data-testid="user-email">
+                  {session.email}
+                </span>
+                <LogoutButton />
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link href="/login">
+                  <Button variant="ghost" data-testid="nav-login">Login</Button>
+                </Link>
+                <Link href="/register">
+                  <Button data-testid="nav-register">Register</Button>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+      </header>
+
+      <main className="flex-1 max-w-4xl mx-auto w-full p-6 flex flex-col justify-center items-center">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="text-3xl font-extrabold tracking-tight">
+              Application Dashboard
+            </CardTitle>
+            <CardDescription>
+              Next.js (App Router) + Prisma + PostgreSQL (Supabase) + Custom Auth
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {session ? (
+              <div className="p-4 rounded-lg bg-green-50 border border-green-200">
+                <p className="font-medium text-green-900">
+                  Welcome back, <span className="font-semibold">{session.name || session.email}</span>!
+                </p>
+                <p className="text-sm text-green-700 mt-1">
+                  Status: Authenticated (Role: <span className="font-mono">{session.role || 'user'}</span>)
+                </p>
+              </div>
+            ) : (
+              <div className="p-4 rounded-lg bg-blue-50 border border-blue-200">
+                <p className="font-medium text-blue-900">You are currently browsing as a guest.</p>
+                <p className="text-sm text-blue-700 mt-1">
+                  Please sign in or register an account to access authenticated features.
+                </p>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+              <div className="p-4 border rounded-lg bg-white shadow-sm">
+                <h3 className="font-semibold text-gray-800 mb-1">Architecture</h3>
+                <p className="text-sm text-gray-600">
+                  Built with Next.js App Router, Route Handlers, Prisma Client, and ShadCN UI.
+                </p>
+              </div>
+              <div className="p-4 border rounded-lg bg-white shadow-sm">
+                <h3 className="font-semibold text-gray-800 mb-1">Authentication</h3>
+                <p className="text-sm text-gray-600">
+                  Custom JWT-based authentication signed via AUTH_SECRET stored in secure httpOnly cookies.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </main>
     </div>
   );
