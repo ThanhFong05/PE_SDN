@@ -68,7 +68,7 @@ export default function ReadingLogFilters() {
                 onChange={(e) => setGenreFilter(e.target.value)}
                 className="w-full h-10 rounded-xl border border-[#dfd0bf] bg-white px-3 text-xs sm:text-sm shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ea580c] focus-visible:border-[#ea580c] text-[#2b2520] cursor-pointer"
               >
-                <option value="">All Genres</option>
+                <option value="">All</option>
                 {VALID_GENRES.map((g) => (
                   <option key={g} value={g}>
                     {g}

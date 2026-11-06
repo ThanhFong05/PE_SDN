@@ -89,11 +89,10 @@ export default function ReadingLogList() {
                       {log.bookTitle}
                     </span>
                     <span
-                      data-testid="reading-log-genre"
                       className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${badge.bg} ${badge.text} ${badge.border}`}
                     >
                       <Tag className="w-3 h-3" />
-                      {log.genre}
+                      <span data-testid="reading-log-genre">{log.genre}</span>
                     </span>
                   </div>
 

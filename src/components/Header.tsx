@@ -41,13 +41,13 @@ export default function Header() {
                 <span>Reading Logs</span>
               </Link>
 
-              <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#f2e9dc]/60 border border-[#ebdccd]">
+              <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#f2e9dc]/60 border border-[#ebdccd]">
                 <div className="w-6 h-6 rounded-full bg-[#ea580c]/15 text-[#ea580c] flex items-center justify-center text-xs font-bold uppercase">
                   {user.email.charAt(0)}
                 </div>
                 <span
                   data-testid="user-email"
-                  className="text-xs font-semibold text-[#54483c] max-w-[160px] truncate"
+                  className="text-xs font-semibold text-[#54483c] max-w-[110px] sm:max-w-[160px] truncate"
                   title={user.email}
                 >
                   {user.email}
@@ -62,7 +62,7 @@ export default function Header() {
                 className="h-9 border-[#decaba] bg-white hover:bg-[#fbf7f0] text-[#54483c] hover:text-red-600 hover:border-red-200 text-xs font-semibold gap-1.5 shadow-xs transition-colors"
               >
                 <LogOut className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Logout</span>
+                <span>Logout</span>
               </Button>
             </div>
           ) : (
