@@ -1,165 +1,140 @@
 import Link from 'next/link';
 import Header from '@/components/Header';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { BookOpen, Tag, Clock, Bookmark, Sparkles } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  BookMarked,
+  Layers,
+  BarChart3,
+  ArrowRight,
+  Sparkles,
+  BookmarkCheck,
+  CheckCircle2,
+} from 'lucide-react';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#fffaf5] text-[#1c1917]">
+    <div className="min-h-screen flex flex-col bg-[#faf6f0] relative overflow-hidden">
+      {/* Decorative Warm Ambient Glow Background */}
+      <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-gradient-to-b from-amber-200/40 via-orange-200/20 to-transparent blur-3xl pointer-events-none -z-10" />
+
       <Header />
 
-      <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-14 sm:py-20 flex flex-col items-center text-center">
-        {/* Sanctuary Pill Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#f5ebe0] text-[#7c4422] text-xs font-semibold mb-6 shadow-xs">
-          <Bookmark className="w-3.5 h-3.5 fill-[#7c4422]" />
-          <span>Your quiet reading sanctuary</span>
+      <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12 sm:py-20 flex flex-col items-center text-center">
+        {/* Hero Tag */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#ebdccd] shadow-xs backdrop-blur-sm mb-6">
+          <span className="flex h-2 w-2 rounded-full bg-[#ea580c] animate-pulse" />
+          <span className="text-xs font-bold text-[#ea580c] uppercase tracking-wider">
+            Your Personal Reading Journal
+          </span>
+          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
         </div>
 
-        {/* Main Title (Mandatory testid: home-title, exact text: ReadLog) */}
+        {/* Hero Heading: Must have home-title with text "ReadLog" */}
         <h1
           data-testid="home-title"
-          className="text-5xl sm:text-7xl font-extrabold tracking-tight text-[#1c1917] mb-5"
+          className="text-5xl sm:text-7xl font-black tracking-tight text-[#2b2520] mb-5 font-serif"
         >
           ReadLog
         </h1>
 
-        {/* Subtitle */}
-        <p className="max-w-xl text-base sm:text-lg text-[#6b5e52] mb-8 leading-relaxed font-normal">
-          Track every reading session, see which genres you love, and watch your minutes add up.
+        <p className="max-w-2xl text-base sm:text-xl text-[#6e5f50] mb-10 leading-relaxed font-normal">
+          Track every session, measure reading time, explore favorite genres, and cultivate a consistent, mindful daily reading habit.
         </p>
 
-        {/* Get started CTA button */}
-        <div className="flex flex-col items-center mb-16">
+        {/* CTA Buttons */}
+        <div className="flex flex-wrap items-center justify-center gap-3.5 mb-16">
           <Link href="/reading-logs">
-            <button
-              type="button"
-              className="px-8 py-3.5 rounded-2xl bg-[#f97316] hover:bg-[#ea580c] text-white font-bold text-base shadow-sm hover:shadow-md transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+            <Button
+              size="lg"
+              className="h-12 bg-gradient-to-r from-[#ea580c] via-[#f97316] to-[#ea580c] hover:from-[#c2410c] hover:to-[#ea580c] text-white font-bold px-7 rounded-xl shadow-lg shadow-orange-500/25 active:scale-98 transition-all flex items-center gap-2"
             >
-              Get started
-            </button>
+              <span>Go to Reading Logs</span>
+              <ArrowRight className="w-4 h-4" />
+            </Button>
           </Link>
-          <p className="text-xs text-[#a89c8f] mt-3 font-medium">
-            Free for avid readers &bull; No credit card required
-          </p>
+
+          <Link href="/register">
+            <Button
+              variant="outline"
+              size="lg"
+              className="h-12 bg-white/90 hover:bg-white border-[#dfd0bf] text-[#423528] hover:border-[#ea580c]/50 font-bold px-7 rounded-xl shadow-xs transition-all"
+            >
+              Create Free Account
+            </Button>
+          </Link>
         </div>
 
-        {/* 3 Feature Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left max-w-5xl">
-          {/* Card 1: Log every session */}
-          <Card className="bg-white rounded-3xl p-6 sm:p-7 border border-[#f0e8de] shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col justify-between">
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#faede1] flex items-center justify-center text-[#c2410c] mb-5">
-                <BookOpen className="w-5 h-5" />
+        {/* Quick Highlights Banner */}
+        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs sm:text-sm font-semibold text-[#827262] mb-16 px-4 py-3 rounded-2xl bg-[#f2e9dc]/50 border border-[#ebdccd]">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-[#ea580c]" />
+            <span>Fast REST API</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-[#ea580c]" />
+            <span>Live Genre Analytics</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-[#ea580c]" />
+            <span>Instant Search & Filters</span>
+          </div>
+        </div>
+
+        {/* Feature Cards (3 cards per spec) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left">
+          {/* Card 1 */}
+          <Card className="bg-white/90 backdrop-blur border-[#ebdccd] shadow-sm hover:shadow-md hover:border-[#ea580c]/40 hover:-translate-y-1 transition-all duration-300 rounded-2xl overflow-hidden group">
+            <div className="h-1.5 w-full bg-gradient-to-r from-orange-400 to-amber-500" />
+            <CardHeader className="p-6">
+              <div className="w-12 h-12 rounded-xl bg-orange-50 border border-orange-200/60 flex items-center justify-center text-[#ea580c] mb-4 group-hover:scale-110 transition-transform">
+                <BookmarkCheck className="w-6 h-6 stroke-[2.2]" />
               </div>
-              <CardTitle className="text-xl font-bold text-[#1c1917] mb-2">
+              <CardTitle className="text-xl font-bold text-[#2b2520]">
                 Log every session
               </CardTitle>
-              <CardDescription className="text-sm text-[#786c5e] leading-normal">
-                Record the book, minutes, genre and date.
+              <CardDescription className="text-[#6e5f50] text-sm mt-2 leading-relaxed">
+                Capture book title, minutes read, personal reflections, and date with a single click. Keep an immaculate record of your reading milestones.
               </CardDescription>
-            </div>
-
-            {/* Widget preview: Atomic Habits log row */}
-            <div className="mt-8 rounded-xl bg-[#fff7ef] border border-[#fdecdb] p-3 flex items-center justify-between text-xs text-[#574c42]">
-              <span className="font-semibold flex items-center gap-1.5 truncate mr-2">
-                <BookOpen className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
-                Atomic Habits
-              </span>
-              <span className="text-[#8c7b6d] shrink-0 font-medium mr-2">45m</span>
-              <span className="shrink-0 text-[#8c4b18] bg-[#fdecdb] px-2 py-0.5 rounded text-[11px] font-medium">
-                Non-Fiction
-              </span>
-            </div>
+            </CardHeader>
           </Card>
 
-          {/* Card 2: Sort by genre */}
-          <Card className="bg-white rounded-3xl p-6 sm:p-7 border border-[#f0e8de] shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col justify-between">
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#faede1] flex items-center justify-center text-[#c2410c] mb-5">
-                <Tag className="w-5 h-5" />
+          {/* Card 2 */}
+          <Card className="bg-white/90 backdrop-blur border-[#ebdccd] shadow-sm hover:shadow-md hover:border-[#ea580c]/40 hover:-translate-y-1 transition-all duration-300 rounded-2xl overflow-hidden group">
+            <div className="h-1.5 w-full bg-gradient-to-r from-amber-500 to-yellow-500" />
+            <CardHeader className="p-6">
+              <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center text-amber-600 mb-4 group-hover:scale-110 transition-transform">
+                <Layers className="w-6 h-6 stroke-[2.2]" />
               </div>
-              <CardTitle className="text-xl font-bold text-[#1c1917] mb-2">
+              <CardTitle className="text-xl font-bold text-[#2b2520]">
                 Sort by genre
               </CardTitle>
-              <CardDescription className="text-sm text-[#786c5e] leading-normal">
-                Filter and search your reading history instantly.
+              <CardDescription className="text-[#6e5f50] text-sm mt-2 leading-relaxed">
+                Seamlessly segment across Fiction, Non-Fiction, Sci-Fi, Biography, or Other. Combine genre tags with favorite stars and full-text keyword search.
               </CardDescription>
-            </div>
-
-            {/* Widget preview: Genre pill badges */}
-            <div className="mt-8 rounded-xl bg-[#fff7ef] border border-[#fdecdb] p-3 flex items-center justify-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-[#fdecdb] text-[#8c4b18] font-semibold text-[11px]">
-                Sci-Fi
-              </span>
-              <span className="px-3 py-1 rounded-full bg-[#fdecdb] text-[#8c4b18] font-semibold text-[11px]">
-                Biography
-              </span>
-              <span className="px-3 py-1 rounded-full bg-[#fdecdb] text-[#8c4b18] font-semibold text-[11px]">
-                Fiction
-              </span>
-            </div>
+            </CardHeader>
           </Card>
 
-          {/* Card 3: See minutes read */}
-          <Card className="bg-white rounded-3xl p-6 sm:p-7 border border-[#f0e8de] shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col justify-between">
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#faede1] flex items-center justify-center text-[#c2410c] mb-5">
-                <Clock className="w-5 h-5" />
+          {/* Card 3 */}
+          <Card className="bg-white/90 backdrop-blur border-[#ebdccd] shadow-sm hover:shadow-md hover:border-[#ea580c]/40 hover:-translate-y-1 transition-all duration-300 rounded-2xl overflow-hidden group">
+            <div className="h-1.5 w-full bg-gradient-to-r from-orange-500 to-rose-500" />
+            <CardHeader className="p-6">
+              <div className="w-12 h-12 rounded-xl bg-rose-50 border border-rose-200/60 flex items-center justify-center text-rose-600 mb-4 group-hover:scale-110 transition-transform">
+                <BarChart3 className="w-6 h-6 stroke-[2.2]" />
               </div>
-              <CardTitle className="text-xl font-bold text-[#1c1917] mb-2">
+              <CardTitle className="text-xl font-bold text-[#2b2520]">
                 See minutes read
               </CardTitle>
-              <CardDescription className="text-sm text-[#786c5e] leading-normal">
-                Live summary of minutes read by genre.
+              <CardDescription className="text-[#6e5f50] text-sm mt-2 leading-relaxed">
+                Watch real-time live summaries compute total time, favorite sessions, and ranked genre minutes breakdowns dynamically as you read.
               </CardDescription>
-            </div>
-
-            {/* Widget preview: Genre progress bars */}
-            <div className="mt-8 rounded-xl bg-[#fff7ef] border border-[#fdecdb] p-3 space-y-2.5 text-xs">
-              <div>
-                <div className="flex justify-between text-[#574c42] font-semibold mb-1 text-[11px]">
-                  <span>Fiction</span>
-                  <span>320m</span>
-                </div>
-                <div className="w-full h-1.5 bg-[#fdecdb] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#f97316] rounded-full w-[75%]" />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between text-[#574c42] font-semibold mb-1 text-[11px]">
-                  <span>Non-Fiction</span>
-                  <span>180m</span>
-                </div>
-                <div className="w-full h-1.5 bg-[#fdecdb] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#a88265] rounded-full w-[45%]" />
-                </div>
-              </div>
-            </div>
+            </CardHeader>
           </Card>
-        </div>
-
-        {/* Subtle decorative quote divider */}
-        <div className="w-full max-w-xl my-16 flex items-center gap-4 text-xs text-[#a89c8f]">
-          <div className="h-px bg-[#ede2d5] flex-1" />
-          <span className="flex items-center gap-1.5 italic font-medium">
-            <Sparkles className="w-3.5 h-3.5 text-[#f97316]" />
-            Crafted for calm and mindful reading journeys
-          </span>
-          <div className="h-px bg-[#ede2d5] flex-1" />
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-[#f0e8de] py-6 px-4 sm:px-8 bg-[#fbf6ed] text-xs text-[#8c7e70]">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="font-semibold text-[#1c1917]">
-            ReadLog <span className="font-normal text-[#8c7e70]">&mdash; Crafted for book lovers</span>
-          </div>
-          <div>
-            &copy; 2026 ReadLog Inc. All rights reserved.
-          </div>
-        </div>
+      <footer className="border-t border-[#ebdccd] py-6 text-center text-xs sm:text-sm text-[#9a8b7a] bg-[#f5ede1]/60">
+        ReadLog &copy; 2026. Practical Exam SDN302.
       </footer>
     </div>
   );

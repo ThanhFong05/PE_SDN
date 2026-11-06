@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { VALID_GENRES } from '@/lib/validation';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Book, Clock, Calendar, Bookmark, FileText, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function ReadingLogForm() {
   const { addLog } = useReadingLogs();
@@ -77,7 +77,6 @@ export default function ReadingLogForm() {
     setApiError('');
     setSuccessMsg('');
 
-    // Check all rules
     const curTitleErr =
       !bookTitle || bookTitle.trim() === ''
         ? 'Book title is required'
@@ -142,15 +141,19 @@ export default function ReadingLogForm() {
   };
 
   return (
-    <Card className="bg-[#fffdfa] border-[#ede3d4] shadow-sm">
-      <CardHeader className="pb-3 border-b border-[#f5efe6]">
-        <CardTitle className="text-lg font-bold text-[#2d231b] flex items-center gap-2">
-          <PlusCircle className="w-5 h-5 text-[#ea580c]" />
+    <Card className="bg-white/95 backdrop-blur border-[#ebdccd] shadow-md shadow-amber-950/5 rounded-2xl overflow-hidden">
+      <div className="h-1.5 w-full bg-gradient-to-r from-orange-500 to-amber-500" />
+
+      <CardHeader className="p-5 pb-3 border-b border-[#f5ece1]">
+        <CardTitle className="text-base sm:text-lg font-bold text-[#2b2520] flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-orange-50 border border-orange-200/80 flex items-center justify-center text-[#ea580c]">
+            <PlusCircle className="w-4 h-4 stroke-[2.3]" />
+          </div>
           <span>Add Reading Session</span>
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="pt-4">
+      <CardContent className="p-5">
         <form
           noValidate
           data-testid="reading-log-form"
@@ -161,9 +164,10 @@ export default function ReadingLogForm() {
           {apiError && (
             <div
               data-testid="error-reading-log"
-              className="rounded-md bg-red-50 p-3 text-sm text-red-600 border border-red-200"
+              className="rounded-xl bg-red-50/90 p-3 text-xs text-red-600 border border-red-200 flex items-start gap-2"
             >
-              {apiError}
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-500" />
+              <span className="font-medium">{apiError}</span>
             </div>
           )}
 
@@ -171,16 +175,19 @@ export default function ReadingLogForm() {
           {successMsg && (
             <div
               data-testid="reading-log-success"
-              className="rounded-md bg-green-50 p-3 text-sm text-green-700 border border-green-200 font-medium"
+              className="rounded-xl bg-emerald-50/90 p-3 text-xs text-emerald-700 border border-emerald-200 flex items-center gap-2 font-bold"
             >
-              {successMsg}
+              <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+              <span>{successMsg}</span>
             </div>
           )}
 
           {/* Book Title */}
           <div className="space-y-1">
-            <Label htmlFor="input-book-title" className="text-xs font-semibold text-[#44382d]">
-              Book Title <span className="text-red-500">*</span>
+            <Label htmlFor="input-book-title" className="text-xs font-bold text-[#423528] flex items-center gap-1.5">
+              <Book className="w-3.5 h-3.5 text-[#ea580c]" />
+              <span>Book Title</span>
+              <span className="text-red-500">*</span>
             </Label>
             <Input
               id="input-book-title"
@@ -192,72 +199,81 @@ export default function ReadingLogForm() {
                 setBookTitle(e.target.value);
                 if (apiError) setApiError('');
               }}
-              className="border-[#e5d9c8] focus-visible:ring-[#ea580c] bg-white h-9"
+              className="border-[#dfd0bf] focus-visible:ring-[#ea580c] focus-visible:border-[#ea580c] bg-white h-9.5 rounded-xl text-sm"
             />
             {titleError && (
-              <p data-testid="error-book-title" className="text-xs text-red-600 font-medium mt-1">
+              <p data-testid="error-book-title" className="text-xs text-red-600 font-semibold mt-1">
                 {titleError}
               </p>
             )}
           </div>
 
-          {/* Minutes Read */}
-          <div className="space-y-1">
-            <Label htmlFor="input-minutes" className="text-xs font-semibold text-[#44382d]">
-              Minutes Read <span className="text-red-500">*</span>
-            </Label>
-            <Input
-              id="input-minutes"
-              data-testid="input-minutes"
-              type="number"
-              placeholder="e.g. 45"
-              value={minutesRead}
-              onChange={(e) => {
-                setMinutesRead(e.target.value);
-                if (apiError) setApiError('');
-              }}
-              className="border-[#e5d9c8] focus-visible:ring-[#ea580c] bg-white h-9"
-            />
-            {minutesError && (
-              <p data-testid="error-minutes" className="text-xs text-red-600 font-medium mt-1">
-                {minutesError}
-              </p>
-            )}
-          </div>
+          {/* Minutes Read & Genre in 2 cols */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            {/* Minutes Read */}
+            <div className="space-y-1">
+              <Label htmlFor="input-minutes" className="text-xs font-bold text-[#423528] flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-[#ea580c]" />
+                <span>Minutes</span>
+                <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="input-minutes"
+                data-testid="input-minutes"
+                type="number"
+                placeholder="e.g. 45"
+                value={minutesRead}
+                onChange={(e) => {
+                  setMinutesRead(e.target.value);
+                  if (apiError) setApiError('');
+                }}
+                className="border-[#dfd0bf] focus-visible:ring-[#ea580c] focus-visible:border-[#ea580c] bg-white h-9.5 rounded-xl text-sm"
+              />
+              {minutesError && (
+                <p data-testid="error-minutes" className="text-xs text-red-600 font-semibold mt-1">
+                  {minutesError}
+                </p>
+              )}
+            </div>
 
-          {/* Genre */}
-          <div className="space-y-1">
-            <Label htmlFor="input-genre" className="text-xs font-semibold text-[#44382d]">
-              Genre <span className="text-red-500">*</span>
-            </Label>
-            <select
-              id="input-genre"
-              data-testid="input-genre"
-              value={genre}
-              onChange={(e) => {
-                setGenre(e.target.value);
-                if (apiError) setApiError('');
-              }}
-              className="w-full h-9 rounded-md border border-[#e5d9c8] bg-white px-3 py-1 text-sm shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ea580c] text-[#2d231b]"
-            >
-              <option value="">Choose genre</option>
-              {VALID_GENRES.map((g) => (
-                <option key={g} value={g}>
-                  {g}
-                </option>
-              ))}
-            </select>
-            {genreError && (
-              <p data-testid="error-genre" className="text-xs text-red-600 font-medium mt-1">
-                {genreError}
-              </p>
-            )}
+            {/* Genre */}
+            <div className="space-y-1">
+              <Label htmlFor="input-genre" className="text-xs font-bold text-[#423528] flex items-center gap-1.5">
+                <Bookmark className="w-3.5 h-3.5 text-[#ea580c]" />
+                <span>Genre</span>
+                <span className="text-red-500">*</span>
+              </Label>
+              <select
+                id="input-genre"
+                data-testid="input-genre"
+                value={genre}
+                onChange={(e) => {
+                  setGenre(e.target.value);
+                  if (apiError) setApiError('');
+                }}
+                className="w-full h-9.5 rounded-xl border border-[#dfd0bf] bg-white px-3 text-xs sm:text-sm shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ea580c] focus-visible:border-[#ea580c] text-[#2b2520] cursor-pointer"
+              >
+                <option value="">Choose genre</option>
+                {VALID_GENRES.map((g) => (
+                  <option key={g} value={g}>
+                    {g}
+                  </option>
+                ))}
+              </select>
+              {genreError && (
+                <p data-testid="error-genre" className="text-xs text-red-600 font-semibold mt-1">
+                  {genreError}
+                </p>
+              )}
+            </div>
           </div>
 
           {/* Date */}
           <div className="space-y-1">
-            <Label htmlFor="input-date" className="text-xs font-semibold text-[#44382d]">
-              Date <span className="text-red-500">*</span>
+            <Label htmlFor="input-date" className="text-xs font-bold text-[#423528] flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-[#ea580c]" />
+              <span>Date Read</span>
+              <span className="text-red-500">*</span>
             </Label>
             <Input
               id="input-date"
@@ -268,10 +284,10 @@ export default function ReadingLogForm() {
                 setReadOn(e.target.value);
                 if (apiError) setApiError('');
               }}
-              className="border-[#e5d9c8] focus-visible:ring-[#ea580c] bg-white h-9"
+              className="border-[#dfd0bf] focus-visible:ring-[#ea580c] focus-visible:border-[#ea580c] bg-white h-9.5 rounded-xl text-sm"
             />
             {dateError && (
-              <p data-testid="error-date" className="text-xs text-red-600 font-medium mt-1">
+              <p data-testid="error-date" className="text-xs text-red-600 font-semibold mt-1">
                 {dateError}
               </p>
             )}
@@ -279,17 +295,18 @@ export default function ReadingLogForm() {
 
           {/* Optional Note */}
           <div className="space-y-1">
-            <Label htmlFor="input-note" className="text-xs font-semibold text-[#44382d]">
-              Note (optional)
+            <Label htmlFor="input-note" className="text-xs font-bold text-[#423528] flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5 text-[#a89988]" />
+              <span>Notes / Key takeaway (optional)</span>
             </Label>
             <Input
               id="input-note"
               data-testid="input-note"
               type="text"
-              placeholder="e.g. Chapter 3"
+              placeholder="e.g. Finished Chapter 4, great insights on habits"
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className="border-[#e5d9c8] focus-visible:ring-[#ea580c] bg-white h-9"
+              className="border-[#dfd0bf] focus-visible:ring-[#ea580c] focus-visible:border-[#ea580c] bg-white h-9.5 rounded-xl text-sm"
             />
           </div>
 
@@ -297,13 +314,12 @@ export default function ReadingLogForm() {
             type="submit"
             disabled={loading}
             data-testid="btn-add-reading-log"
-            className="w-full bg-[#ea580c] hover:bg-[#c2410c] text-white font-semibold shadow-sm mt-2"
+            className="w-full h-10.5 bg-gradient-to-r from-[#ea580c] to-[#f97316] hover:from-[#c2410c] hover:to-[#ea580c] text-white font-bold rounded-xl shadow-md shadow-orange-500/20 active:scale-98 transition-all mt-2"
           >
-            {loading ? 'Adding...' : 'Add Session'}
+            {loading ? 'Adding Session...' : 'Add Session'}
           </Button>
         </form>
       </CardContent>
     </Card>
   );
 }
-
