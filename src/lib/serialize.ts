@@ -28,3 +28,4 @@ export function serializeReadingLog(log: ReadingLog): SerializedReadingLog {
     createdAt: log.createdAt instanceof Date ? log.createdAt.toISOString() : new Date(log.createdAt).toISOString(),
   };
 }
+
