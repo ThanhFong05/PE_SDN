@@ -1,89 +1,102 @@
 import Link from 'next/link';
-import { getSession } from '@/lib/auth';
+import Header from '@/components/Header';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import LogoutButton from '@/components/auth/LogoutButton';
+import { BookMarked, Layers, BarChart3, ArrowRight } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-
-export default async function HomePage() {
-  const session = await getSession();
-
+export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="border-b bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="font-bold text-xl text-gray-900">
-            Exam Portal
-          </Link>
-          <div className="flex items-center gap-4">
-            {session ? (
-              <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-600" data-testid="user-email">
-                  {session.email}
-                </span>
-                <LogoutButton />
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Link href="/login">
-                  <Button variant="ghost" data-testid="nav-login">Login</Button>
-                </Link>
-                <Link href="/register">
-                  <Button data-testid="nav-register">Register</Button>
-                </Link>
-              </div>
-            )}
-          </div>
+    <div className="min-h-screen flex flex-col bg-[#fdfbf7]">
+      <Header />
+
+      <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12 sm:py-20 flex flex-col items-center text-center">
+        {/* Hero Section */}
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#fceddf] border border-[#f7d6be] text-[#c2410c] text-xs font-semibold mb-6">
+          <BookMarked className="w-3.5 h-3.5" />
+          <span>Your Personal Reading Companion</span>
         </div>
-      </header>
 
-      <main className="flex-1 max-w-4xl mx-auto w-full p-6 flex flex-col justify-center items-center">
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle className="text-3xl font-extrabold tracking-tight">
-              Application Dashboard
-            </CardTitle>
-            <CardDescription>
-              Next.js (App Router) + Prisma + PostgreSQL (Supabase) + Custom Auth
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {session ? (
-              <div className="p-4 rounded-lg bg-green-50 border border-green-200">
-                <p className="font-medium text-green-900">
-                  Welcome back, <span className="font-semibold">{session.name || session.email}</span>!
-                </p>
-                <p className="text-sm text-green-700 mt-1">
-                  Status: Authenticated (Role: <span className="font-mono">{session.role || 'user'}</span>)
-                </p>
-              </div>
-            ) : (
-              <div className="p-4 rounded-lg bg-blue-50 border border-blue-200">
-                <p className="font-medium text-blue-900">You are currently browsing as a guest.</p>
-                <p className="text-sm text-blue-700 mt-1">
-                  Please sign in or register an account to access authenticated features.
-                </p>
-              </div>
-            )}
+        <h1
+          data-testid="home-title"
+          className="text-4xl sm:text-6xl font-extrabold tracking-tight text-[#2d231b] mb-4"
+        >
+          ReadLog
+        </h1>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-              <div className="p-4 border rounded-lg bg-white shadow-sm">
-                <h3 className="font-semibold text-gray-800 mb-1">Architecture</h3>
-                <p className="text-sm text-gray-600">
-                  Built with Next.js App Router, Route Handlers, Prisma Client, and ShadCN UI.
-                </p>
+        <p className="max-w-2xl text-lg sm:text-xl text-[#786c5e] mb-8 leading-relaxed">
+          Track every book, log your reading minutes, organize by genre, and discover your reading habits through insightful summaries.
+        </p>
+
+        <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
+          <Link href="/reading-logs">
+            <Button
+              size="lg"
+              className="bg-[#ea580c] hover:bg-[#c2410c] text-white font-semibold px-6 shadow-md shadow-orange-500/20 flex items-center gap-2"
+            >
+              <span>Go to Reading Logs</span>
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+          </Link>
+          <Link href="/register">
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-[#e5d9c8] text-[#44382d] hover:bg-[#f5efe6] font-semibold px-6"
+            >
+              Create Free Account
+            </Button>
+          </Link>
+        </div>
+
+        {/* Feature Cards (At least three feature cards) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left">
+          <Card className="bg-[#fffdfa] border-[#ede3d4] shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader>
+              <div className="w-10 h-10 rounded-lg bg-[#fff1e7] flex items-center justify-center text-[#ea580c] mb-3">
+                <BookMarked className="w-5 h-5" />
               </div>
-              <div className="p-4 border rounded-lg bg-white shadow-sm">
-                <h3 className="font-semibold text-gray-800 mb-1">Authentication</h3>
-                <p className="text-sm text-gray-600">
-                  Custom JWT-based authentication signed via AUTH_SECRET stored in secure httpOnly cookies.
-                </p>
+              <CardTitle className="text-xl font-bold text-[#2d231b]">
+                Log every session
+              </CardTitle>
+              <CardDescription className="text-[#786c5e] text-sm mt-1">
+                Record the book title, minutes spent reading, session notes, and date with zero friction.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="bg-[#fffdfa] border-[#ede3d4] shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader>
+              <div className="w-10 h-10 rounded-lg bg-[#fff1e7] flex items-center justify-center text-[#ea580c] mb-3">
+                <Layers className="w-5 h-5" />
               </div>
-            </div>
-          </CardContent>
-        </Card>
+              <CardTitle className="text-xl font-bold text-[#2d231b]">
+                Sort by genre
+              </CardTitle>
+              <CardDescription className="text-[#786c5e] text-sm mt-1">
+                Filter instantly across Fiction, Non-Fiction, Sci-Fi, Biography, or Other to find your favorites.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="bg-[#fffdfa] border-[#ede3d4] shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader>
+              <div className="w-10 h-10 rounded-lg bg-[#fff1e7] flex items-center justify-center text-[#ea580c] mb-3">
+                <BarChart3 className="w-5 h-5" />
+              </div>
+              <CardTitle className="text-xl font-bold text-[#2d231b]">
+                See minutes read
+              </CardTitle>
+              <CardDescription className="text-[#786c5e] text-sm mt-1">
+                Get real-time breakdown stats of total reading time and favorite sessions broken down by genre.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
       </main>
+
+      <footer className="border-t border-[#ede3d4] py-6 text-center text-sm text-[#968776] bg-[#fbf7f0]">
+        ReadLog &copy; 2026. Practical Exam SDN302.
+      </footer>
     </div>
   );
 }

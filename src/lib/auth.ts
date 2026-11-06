@@ -2,16 +2,13 @@ import { SignJWT, jwtVerify } from 'jose';
 import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
 
-const COOKIE_NAME = 'auth_token';
-const AUTH_SECRET = process.env.AUTH_SECRET || 'fallback-secret-for-development-mode-only';
+export const COOKIE_NAME = 'session_token';
+const AUTH_SECRET = process.env.AUTH_SECRET || 'readlog-super-secret-auth-key-2026';
 const SECRET_KEY = new TextEncoder().encode(AUTH_SECRET);
 
-export interface TokenPayload {
+export interface SessionUser {
   id: string;
   email: string;
-  role?: string;
-  name?: string | null;
-  [key: string]: unknown;
 }
 
 export async function hashPassword(password: string): Promise<string> {
@@ -23,18 +20,21 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
   return bcrypt.compare(password, hash);
 }
 
-export async function signToken(payload: TokenPayload): Promise<string> {
-  return new SignJWT(payload)
+export async function signToken(payload: SessionUser): Promise<string> {
+  return new SignJWT({ id: payload.id, email: payload.email })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
     .sign(SECRET_KEY);
 }
 
-export async function verifyToken(token: string): Promise<TokenPayload | null> {
+export async function verifyToken(token: string): Promise<SessionUser | null> {
   try {
     const { payload } = await jwtVerify(token, SECRET_KEY);
-    return payload as unknown as TokenPayload;
+    if (typeof payload.id === 'string' && typeof payload.email === 'string') {
+      return { id: payload.id, email: payload.email };
+    }
+    return null;
   } catch {
     return null;
   }
@@ -62,10 +62,39 @@ export async function clearAuthCookie() {
   });
 }
 
-export async function getSession(): Promise<TokenPayload | null> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get(COOKIE_NAME)?.value;
-  if (!token) return null;
-  return verifyToken(token);
-}
+export async function getSessionUser(req?: Request): Promise<SessionUser | null> {
+  // 1. Try reading from request headers if available (direct HTTP calls)
+  if (req) {
+    const cookieHeader = req.headers.get('cookie');
+    if (cookieHeader) {
+      const match = cookieHeader
+        .split(';')
+        .map((c) => c.trim())
+        .find((c) => c.startsWith(`${COOKIE_NAME}=`));
+      if (match) {
+        const token = match.substring(COOKIE_NAME.length + 1);
+        const user = await verifyToken(token);
+        if (user) return user;
+      }
+    }
+    const authHeader = req.headers.get('authorization');
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.substring(7);
+      const user = await verifyToken(token);
+      if (user) return user;
+    }
+  }
 
+  // 2. Fall back to Next.js cookies()
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(COOKIE_NAME)?.value;
+    if (token) {
+      return await verifyToken(token);
+    }
+  } catch {
+    // cookies() might not be available in some contexts
+  }
+
+  return null;
+}

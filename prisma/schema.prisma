@@ -9,12 +9,24 @@ generator client {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  name      String?
-  role      String   @default("user")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String       @id @default(cuid())
+  email        String       @unique
+  passwordHash String
+  createdAt    DateTime     @default(now())
+  logs         ReadingLog[]
 }
 
+model ReadingLog {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookTitle   String
+  minutesRead Int
+  genre       String
+  note        String   @default("")
+  favorite    Boolean  @default(false)
+  readOn      DateTime @db.Date
+  createdAt   DateTime @default(now())
+
+  @@index([userId, readOn])
+}
